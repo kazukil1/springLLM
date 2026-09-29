@@ -1,0 +1,40 @@
+# 本地开发配置模板
+# 复制此文件为 application-local.yaml 并填入实际值
+# 注意：application-local.yaml 已被 .gitignore 忽略，不会提交到 Git
+
+spring:
+  ai:
+    dashscope:
+      # DashScope API Key
+      api-key: ${DASHSCOPE_API_KEY:your-dashscope-api-key-here}
+    openai:
+      # OpenAI 兼容 API Key (如果使用)
+      api-key: ${OPENAI_API_KEY:your-openai-api-key-here}
+  
+  datasource:
+    # MySQL 数据库配置
+    url: jdbc:mysql://localhost:3306/spring_ai?useUnicode=true&characterEncoding=UTF-8
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:your-database-password-here}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+# LangChain4j 配置
+langchain4j:
+  open-ai:
+    chat-model:
+      api-key: ${LANGCHAIN4J_API_KEY:your-langchain4j-api-key-here}
+      base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
+      model-name: qwen3.7-plus
+      log-requests: true
+      log-responses: true
+    streaming-chat-model:
+      api-key: ${LANGCHAIN4J_STREAMING_API_KEY:your-langchain4j-streaming-api-key-here}
+      base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
+      model-name: qwen3.7-plus
+      log-requests: true
+      log-responses: true
+
+# 其他可能的配置
+# api:
+#   xiaomi:
+#     api-key: ${XIAOMI_API_KEY:your-xiaomi-api-key-here}

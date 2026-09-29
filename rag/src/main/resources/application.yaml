@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: rag
+  profiles:
+    active: local
+  config:
+    import: optional:file:.env
+  ai:
+    dashscope:
+      api-key: ${DASHSCOPE_API_KEY}
+      base-url: https://dashscope.aliyuncs.com
+      model: qwen3.7-plus
+    chat:
+      memory:
+        repository:
+          jdbc:
+            platform: mysql
+            initialize-schema: ALWAYS
+  datasource:
+    url: jdbc:mysql://localhost:3306/spring_ai?useUnicode=true&characterEncoding=UTF-8
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+server:
+  port: 8080
