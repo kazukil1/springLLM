@@ -20,10 +20,24 @@ spring:
           jdbc:
             platform: mysql
             initialize-schema: ALWAYS
+    vectorstore:
+      pgvector:
+        # 向量索引类型
+        index-type: HNSW
+        # 距离度量，余弦值
+        distance-type: COSINE_DISTANCE
+        # 向量维度
+        dimensions: 768
+        # 批量处理大小
+        max-document-batch-size: 9
+        # 启动时是否自动创建表
+        initialize-schema: true
+        # 创建的表名
+        table-name: vector_st
   datasource:
-    url: jdbc:mysql://localhost:3306/spring_ai?useUnicode=true&characterEncoding=UTF-8
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:postgresql://localhost:5433/rag_test
+    username: ${PG_USERNAME}
+    password: ${PG_PASSWORD}
+#    driver-class-name: com.mysql.cj.jdbc.Driver
 server:
   port: 8080
