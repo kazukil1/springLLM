@@ -4,8 +4,6 @@ import org.springframework.ai.document.Document;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
