@@ -38,7 +38,7 @@ public class EmbeddingService {
 
     }
     private static final int DEFAULT_TOP_K = 5;
-    private static final double DEFAULT_SIMILARITY_THRESHOLD = 0.7;
+    private static final double DEFAULT_SIMILARITY_THRESHOLD = 0.5;
     public List<Document> similaritySearch(String query){
         return vectorStore.similaritySearch(SearchRequest.builder()
                 .query(query)//查询内容
@@ -46,4 +46,13 @@ public class EmbeddingService {
                 .similarityThreshold(DEFAULT_SIMILARITY_THRESHOLD)//相似度阈值
                 .build()) ;
     }
+    public List<Document> similaritySearch(SearchRequest query){
+        return vectorStore.similaritySearch(SearchRequest.builder()
+                        .query(query.getQuery())
+                        .filterExpression(query.getFilterExpression())
+                .topK(DEFAULT_TOP_K)//检索条数
+                .similarityThreshold(DEFAULT_SIMILARITY_THRESHOLD)//相似度阈值
+                .build()) ;
+    }
+
 }
