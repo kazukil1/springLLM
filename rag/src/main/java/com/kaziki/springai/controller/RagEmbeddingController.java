@@ -1,10 +1,14 @@
 package com.kaziki.springai.controller;
 
 import com.alibaba.cloud.ai.transformer.splitter.RecursiveCharacterTextSplitter;
+import com.kaziki.springai.cleaner.DocumentCleaner;
 import com.kaziki.springai.embedding.EmbeddingService;
 import com.kaziki.springai.reader.DocumentReaderFactory;
+import com.kaziki.springai.spiltter.OverlapParagraphTextSplitter;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
+import org.springframework.ai.vectorstore.SearchRequest;
+import org.springframework.ai.vectorstore.pgvector.PgVectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +29,8 @@ public class RagEmbeddingController {
     private DocumentReaderFactory documentReaderFactory;
     @Autowired
     private EmbeddingService embeddingService;
+    @Autowired
+    private PgVectorStore vectorStore;
 
     @GetMapping("/add")
     public String add() {
@@ -33,6 +39,11 @@ public class RagEmbeddingController {
         return "Rag Embedding Test";
     }
 
+    /**
+     * 向量化文件并存储
+     * @param filePath
+     * @return
+     */
     @GetMapping("/embed")
     public String embed(String  filePath){
         List<Document> documents = new ArrayList<>();
@@ -41,14 +52,16 @@ public class RagEmbeddingController {
         }catch (Exception e){
             e.printStackTrace();
         }
-
+        documents=DocumentCleaner.cleanDocuments(documents);
         List<Document> chunks = new ArrayList<>();
         for(Document document: documents){
-            RecursiveCharacterTextSplitter splitter=new RecursiveCharacterTextSplitter(300,new String[]{"\n\n","\n"});
+            OverlapParagraphTextSplitter splitter=new OverlapParagraphTextSplitter(1000,50);
             chunks.addAll(splitter.split(document));
 
         }
         embeddingService.embedAndStore(chunks);
         return "Embedding and storing completed.";
     }
+
+
 }

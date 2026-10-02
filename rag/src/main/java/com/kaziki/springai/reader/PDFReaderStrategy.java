@@ -4,6 +4,7 @@ import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.ExtractedTextFormatter;
 import org.springframework.ai.reader.TextReader;
 import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
+import org.springframework.ai.reader.pdf.ParagraphPdfDocumentReader;
 import org.springframework.ai.reader.pdf.config.PdfDocumentReaderConfig;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -24,7 +25,7 @@ public class PDFReaderStrategy implements DocumentReaderStrategy {
     @Override
     public List<Document> read(File file) throws IOException {
         Resource resource =new FileSystemResource(file);
-        PagePdfDocumentReader pagePdfDocumentReader=new PagePdfDocumentReader(resource);
+
 
         //读取配置
         PdfDocumentReaderConfig config = PdfDocumentReaderConfig.builder()
@@ -36,6 +37,7 @@ public class PDFReaderStrategy implements DocumentReaderStrategy {
                                 .withNumberOfTopTextLinesToDelete(0)//每页 删除0行
                                 .build()
                 ).build();
-        return pagePdfDocumentReader.get();
+        ParagraphPdfDocumentReader paragraphPdfDocumentReader = new ParagraphPdfDocumentReader(resource, config);
+        return paragraphPdfDocumentReader.get();
     }
 }

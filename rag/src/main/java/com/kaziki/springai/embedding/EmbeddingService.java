@@ -2,6 +2,7 @@ package com.kaziki.springai.embedding;
 
 import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
+import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,5 +36,14 @@ public class EmbeddingService {
             vectorStore.add(batches);
         }
 
+    }
+    private static final int DEFAULT_TOP_K = 5;
+    private static final double DEFAULT_SIMILARITY_THRESHOLD = 0.7;
+    public List<Document> similaritySearch(String query){
+        return vectorStore.similaritySearch(SearchRequest.builder()
+                .query(query)//查询内容
+                .topK(DEFAULT_TOP_K)//检索条数
+                .similarityThreshold(DEFAULT_SIMILARITY_THRESHOLD)//相似度阈值
+                .build()) ;
     }
 }
